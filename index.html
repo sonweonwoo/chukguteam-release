@@ -223,6 +223,75 @@
   .btn.lg { padding: 15px 30px; font-size: 17px; }
   .dl-meta { margin-top: 20px; font-size: 13px; color: var(--muted); }
 
+  /* ===== Screenshot gallery ===== */
+  .shots-track {
+    display: flex; gap: 26px; overflow-x: auto; padding: 10px 4px 26px;
+    scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+  }
+  .shots-track::-webkit-scrollbar { height: 8px; }
+  .shots-track::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
+  .shot { scroll-snap-align: center; flex: 0 0 auto; text-align: center; }
+  .shot-phone {
+    width: 232px; height: 470px; border-radius: 34px;
+    background: linear-gradient(160deg, #1b2536, #0d141f);
+    border: 1px solid var(--line);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    padding: 10px; position: relative;
+  }
+  .shot-phone::before {
+    content: ""; position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    width: 96px; height: 20px; background: #05090f; border-radius: 0 0 14px 14px; z-index: 2;
+  }
+  .shot .screen {
+    width: 100%; height: 100%; border-radius: 24px; overflow: hidden;
+    background: radial-gradient(120% 80% at 50% 0%, #16233a, #0a1220);
+    display: flex; flex-direction: column;
+  }
+  .mini-top {
+    padding: 30px 14px 12px; display: flex; align-items: center; gap: 9px;
+    background: linear-gradient(135deg, rgba(34,197,94,0.16), transparent);
+    border-bottom: 1px solid var(--line);
+  }
+  .mini-top .av { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-size: 15px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+  .mini-top b { font-size: 13px; }
+  .mini-top small { display: block; color: var(--muted); font-size: 10px; font-weight: 400; }
+  .mini-body { flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 9px; overflow: hidden; }
+  /* chat */
+  .bubble { max-width: 80%; padding: 8px 11px; border-radius: 14px; font-size: 11.5px; line-height: 1.45; }
+  .bubble.in { align-self: flex-start; background: rgba(255,255,255,0.06); border: 1px solid var(--line); border-bottom-left-radius: 4px; }
+  .bubble.out { align-self: flex-end; background: rgba(34,197,94,0.18); border: 1px solid rgba(34,197,94,0.3); color: #dffbe9; border-bottom-right-radius: 4px; }
+  /* poll */
+  .poll-row { display: flex; align-items: center; gap: 8px; font-size: 11.5px; }
+  .poll-row .pl { width: 40px; text-align: left; color: var(--muted); }
+  .poll-row .bar { flex: 1; height: 12px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden; }
+  .poll-row .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+  .poll-row .pn { width: 20px; text-align: right; font-weight: 700; }
+  .poll-q { font-size: 12.5px; font-weight: 700; margin-bottom: 2px; }
+  /* schedule */
+  .sch { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 12px;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--line); }
+  .sch .dy { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; font-weight: 800; font-size: 12px;
+    background: rgba(34,197,94,0.14); color: var(--accent); }
+  .sch .info b { font-size: 12px; display: block; }
+  .sch .info span { font-size: 10.5px; color: var(--muted); }
+  /* ai */
+  .ai-screen { align-items: center; justify-content: center; text-align: center; gap: 16px; }
+  .ai-orb { width: 96px; height: 96px; border-radius: 50%;
+    background: radial-gradient(circle at 50% 40%, rgba(34,197,94,0.55), rgba(34,197,94,0.08) 70%);
+    display: grid; place-items: center; font-size: 40px;
+    box-shadow: 0 0 40px var(--accent-glow); animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { transform: scale(1); opacity: .9; } 50% { transform: scale(1.06); opacity: 1; } }
+  .ai-wave { display: flex; gap: 4px; align-items: flex-end; height: 26px; }
+  .ai-wave i { width: 4px; background: var(--accent); border-radius: 2px; animation: eq 1s ease-in-out infinite; }
+  .ai-wave i:nth-child(1){height:40%;animation-delay:0s}.ai-wave i:nth-child(2){height:90%;animation-delay:.15s}
+  .ai-wave i:nth-child(3){height:60%;animation-delay:.3s}.ai-wave i:nth-child(4){height:100%;animation-delay:.45s}
+  .ai-wave i:nth-child(5){height:50%;animation-delay:.6s}
+  @keyframes eq { 0%,100% { transform: scaleY(.5); } 50% { transform: scaleY(1); } }
+  .ai-q { font-size: 12.5px; color: var(--text); padding: 0 20px; }
+  .shot-cap { margin-top: 14px; font-weight: 700; font-size: 15px; }
+  .shot-cap span { display: block; color: var(--muted); font-weight: 400; font-size: 13px; margin-top: 2px; }
+
   /* ===== Footer ===== */
   footer { border-top: 1px solid var(--line); padding: 44px 0; margin-top: 40px; }
   .foot { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
@@ -243,6 +312,7 @@
     <a class="brand" href="#top"><span class="badge">⚽</span> 축구팀</a>
     <nav class="nav-links">
       <a href="#features">기능</a>
+      <a href="#screenshots">미리보기</a>
       <a href="#how">시작하기</a>
       <a href="#download">다운로드</a>
     </nav>
@@ -355,6 +425,73 @@
           <div class="ic">🧭</div>
           <h3>친절한 사용 안내</h3>
           <p>첫 등록·입장 도움말과 페이지별 사용법 안내로, 누구나 헤매지 않고 시작할 수 있습니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREENSHOTS -->
+  <section class="block" id="screenshots">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">Screenshots</div>
+        <h2>앱 미리보기</h2>
+        <p>실제 앱에서 이렇게 보입니다. 좌우로 넘겨 화면을 살펴보세요.</p>
+      </div>
+      <div class="shots-track reveal">
+        <!-- 채팅 -->
+        <div class="shot">
+          <div class="shot-phone"><div class="screen">
+            <div class="mini-top"><div class="av">💬</div><div><b>팀 채팅</b><small>온라인 11명</small></div></div>
+            <div class="mini-body">
+              <div class="bubble in">토요일 경기 다들 참석하나요?</div>
+              <div class="bubble out">저 참석이요! ⚽</div>
+              <div class="bubble in">골키퍼 한 분 더 필요해요</div>
+              <div class="bubble out">제가 골문 서겠습니다 🧤</div>
+              <div class="bubble in">좋아요, 07시 시민운동장!</div>
+            </div>
+          </div></div>
+          <div class="shot-cap">실시간 팀 채팅<span>전략·약속을 한곳에서</span></div>
+        </div>
+        <!-- 투표 -->
+        <div class="shot">
+          <div class="shot-phone"><div class="screen">
+            <div class="mini-top"><div class="av">✅</div><div><b>참석 투표</b><small>토요일 정기 경기</small></div></div>
+            <div class="mini-body" style="justify-content:center;">
+              <div class="poll-q">이번 주 경기 참석하시나요?</div>
+              <div class="poll-row"><span class="pl">참석</span><div class="bar"><i style="width:82%"></i></div><span class="pn">9</span></div>
+              <div class="poll-row"><span class="pl">미정</span><div class="bar"><i style="width:27%"></i></div><span class="pn">3</span></div>
+              <div class="poll-row"><span class="pl">불참</span><div class="bar"><i style="width:18%"></i></div><span class="pn">2</span></div>
+              <div class="sch" style="margin-top:12px;"><div class="dy">14</div><div class="info"><b>마감까지</b><span>내일 오후 6시</span></div></div>
+            </div>
+          </div></div>
+          <div class="shot-cap">참석 투표<span>한 번에 인원 파악</span></div>
+        </div>
+        <!-- 일정 -->
+        <div class="shot">
+          <div class="shot-phone"><div class="screen">
+            <div class="mini-top"><div class="av">📅</div><div><b>팀 일정</b><small>이번 달</small></div></div>
+            <div class="mini-body">
+              <div class="sch"><div class="dy">일</div><div class="info"><b>정기 경기</b><span>07:00 · 시민운동장</span></div></div>
+              <div class="sch"><div class="dy">수</div><div class="info"><b>야간 훈련</b><span>20:00 · 풋살장 B</span></div></div>
+              <div class="sch"><div class="dy">토</div><div class="info"><b>친선 경기</b><span>15:00 · 강변 구장</span></div></div>
+              <div class="sch"><div class="dy">일</div><div class="info"><b>정기 경기 (반복)</b><span>07:00 · 시민운동장</span></div></div>
+            </div>
+          </div></div>
+          <div class="shot-cap">반복 일정<span>한 번 등록하면 자동 반복</span></div>
+        </div>
+        <!-- AI 비서 -->
+        <div class="shot">
+          <div class="shot-phone"><div class="screen">
+            <div class="mini-top"><div class="av">🎙️</div><div><b>AI 비서</b><small>듣는 중…</small></div></div>
+            <div class="mini-body ai-screen">
+              <div class="ai-orb">🎙️</div>
+              <div class="ai-wave"><i></i><i></i><i></i><i></i><i></i></div>
+              <div class="ai-q">"다음 경기 언제야?"</div>
+              <div class="bubble in" style="align-self:center;">다음 경기는 <b>일요일 07:00</b>, 시민운동장이에요.</div>
+            </div>
+          </div></div>
+          <div class="shot-cap">AI 음성 비서<span>말하면 바로 답해줘요</span></div>
         </div>
       </div>
     </div>

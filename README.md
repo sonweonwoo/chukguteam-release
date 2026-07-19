@@ -6,7 +6,7 @@
 - `index.html` — 앱 소개 랜딩 페이지(한국어)
 - `en/index.html` — 영어 버전(English)
 
-정적 HTML이며, 각 페이지 상단의 **KO / EN** 버튼으로 서로 전환할 수 있습니다. 브라우저로 바로 열거나 GitHub Pages 등으로 배포할 수 있습니다.
+정적 HTML이며, 각 페이지 상단의 **KO / EN** 버튼으로 서로 전환할 수 있습니다. 앱 화면을 재현한 **미리보기(스크린샷) 갤러리** 섹션이 포함되어 있습니다(실제 캡처가 생기면 이미지로 교체 가능). 브라우저로 바로 열거나 GitHub Pages 등으로 배포할 수 있습니다.
 공개 주소: https://sonweonwoo.github.io/chukguteam-release/ (영어: `/en/`)
 
 ### 설치 주소
