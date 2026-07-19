@@ -223,6 +223,75 @@
   .btn.lg { padding: 15px 30px; font-size: 17px; }
   .dl-meta { margin-top: 20px; font-size: 13px; color: var(--muted); }
 
+  /* ===== Screenshot gallery ===== */
+  .shots-track {
+    display: flex; gap: 26px; overflow-x: auto; padding: 10px 4px 26px;
+    scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+  }
+  .shots-track::-webkit-scrollbar { height: 8px; }
+  .shots-track::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
+  .shot { scroll-snap-align: center; flex: 0 0 auto; text-align: center; }
+  .shot-phone {
+    width: 232px; height: 470px; border-radius: 34px;
+    background: linear-gradient(160deg, #1b2536, #0d141f);
+    border: 1px solid var(--line);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    padding: 10px; position: relative;
+  }
+  .shot-phone::before {
+    content: ""; position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    width: 96px; height: 20px; background: #05090f; border-radius: 0 0 14px 14px; z-index: 2;
+  }
+  .shot .screen {
+    width: 100%; height: 100%; border-radius: 24px; overflow: hidden;
+    background: radial-gradient(120% 80% at 50% 0%, #16233a, #0a1220);
+    display: flex; flex-direction: column;
+  }
+  .mini-top {
+    padding: 30px 14px 12px; display: flex; align-items: center; gap: 9px;
+    background: linear-gradient(135deg, rgba(34,197,94,0.16), transparent);
+    border-bottom: 1px solid var(--line);
+  }
+  .mini-top .av { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-size: 15px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+  .mini-top b { font-size: 13px; }
+  .mini-top small { display: block; color: var(--muted); font-size: 10px; font-weight: 400; }
+  .mini-body { flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 9px; overflow: hidden; }
+  /* chat */
+  .bubble { max-width: 80%; padding: 8px 11px; border-radius: 14px; font-size: 11.5px; line-height: 1.45; }
+  .bubble.in { align-self: flex-start; background: rgba(255,255,255,0.06); border: 1px solid var(--line); border-bottom-left-radius: 4px; }
+  .bubble.out { align-self: flex-end; background: rgba(34,197,94,0.18); border: 1px solid rgba(34,197,94,0.3); color: #dffbe9; border-bottom-right-radius: 4px; }
+  /* poll */
+  .poll-row { display: flex; align-items: center; gap: 8px; font-size: 11.5px; }
+  .poll-row .pl { width: 46px; text-align: left; color: var(--muted); }
+  .poll-row .bar { flex: 1; height: 12px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden; }
+  .poll-row .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+  .poll-row .pn { width: 20px; text-align: right; font-weight: 700; }
+  .poll-q { font-size: 12.5px; font-weight: 700; margin-bottom: 2px; }
+  /* schedule */
+  .sch { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 12px;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--line); }
+  .sch .dy { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; font-weight: 800; font-size: 12px;
+    background: rgba(34,197,94,0.14); color: var(--accent); }
+  .sch .info b { font-size: 12px; display: block; }
+  .sch .info span { font-size: 10.5px; color: var(--muted); }
+  /* ai */
+  .ai-screen { align-items: center; justify-content: center; text-align: center; gap: 16px; }
+  .ai-orb { width: 96px; height: 96px; border-radius: 50%;
+    background: radial-gradient(circle at 50% 40%, rgba(34,197,94,0.55), rgba(34,197,94,0.08) 70%);
+    display: grid; place-items: center; font-size: 40px;
+    box-shadow: 0 0 40px var(--accent-glow); animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { transform: scale(1); opacity: .9; } 50% { transform: scale(1.06); opacity: 1; } }
+  .ai-wave { display: flex; gap: 4px; align-items: flex-end; height: 26px; }
+  .ai-wave i { width: 4px; background: var(--accent); border-radius: 2px; animation: eq 1s ease-in-out infinite; }
+  .ai-wave i:nth-child(1){height:40%;animation-delay:0s}.ai-wave i:nth-child(2){height:90%;animation-delay:.15s}
+  .ai-wave i:nth-child(3){height:60%;animation-delay:.3s}.ai-wave i:nth-child(4){height:100%;animation-delay:.45s}
+  .ai-wave i:nth-child(5){height:50%;animation-delay:.6s}
+  @keyframes eq { 0%,100% { transform: scaleY(.5); } 50% { transform: scaleY(1); } }
+  .ai-q { font-size: 12.5px; color: var(--text); padding: 0 20px; }
+  .shot-cap { margin-top: 14px; font-weight: 700; font-size: 15px; }
+  .shot-cap span { display: block; color: var(--muted); font-weight: 400; font-size: 13px; margin-top: 2px; }
+
   /* ===== Footer ===== */
   footer { border-top: 1px solid var(--line); padding: 44px 0; margin-top: 40px; }
   .foot { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
@@ -243,6 +312,7 @@
     <a class="brand" href="#top"><span class="badge">⚽</span> Chukguteam</a>
     <nav class="nav-links">
       <a href="#features">Features</a>
+      <a href="#screenshots">Preview</a>
       <a href="#how">Get Started</a>
       <a href="#download">Download</a>
     </nav>
@@ -355,6 +425,73 @@
           <div class="ic">🧭</div>
           <h3>Friendly guidance</h3>
           <p>First-time setup tips and per-page how-to hints mean anyone can start without getting lost.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREENSHOTS -->
+  <section class="block" id="screenshots">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">Screenshots</div>
+        <h2>App preview</h2>
+        <p>Here's how it looks in the real app. Swipe to browse the screens.</p>
+      </div>
+      <div class="shots-track reveal">
+        <!-- Chat -->
+        <div class="shot">
+          <div class="shot-phone"><div class="screen">
+            <div class="mini-top"><div class="av">💬</div><div><b>Team chat</b><small>11 online</small></div></div>
+            <div class="mini-body">
+              <div class="bubble in">Is everyone in for Saturday's match?</div>
+              <div class="bubble out">I'm in! ⚽</div>
+              <div class="bubble in">We need one more keeper</div>
+              <div class="bubble out">I'll take the goal 🧤</div>
+              <div class="bubble in">Great, 07:00 at City Ground!</div>
+            </div>
+          </div></div>
+          <div class="shot-cap">Real-time team chat<span>Tactics &amp; plans in one place</span></div>
+        </div>
+        <!-- Poll -->
+        <div class="shot">
+          <div class="shot-phone"><div class="screen">
+            <div class="mini-top"><div class="av">✅</div><div><b>Attendance poll</b><small>Saturday match</small></div></div>
+            <div class="mini-body" style="justify-content:center;">
+              <div class="poll-q">Are you in for this week's match?</div>
+              <div class="poll-row"><span class="pl">In</span><div class="bar"><i style="width:82%"></i></div><span class="pn">9</span></div>
+              <div class="poll-row"><span class="pl">Maybe</span><div class="bar"><i style="width:27%"></i></div><span class="pn">3</span></div>
+              <div class="poll-row"><span class="pl">Out</span><div class="bar"><i style="width:18%"></i></div><span class="pn">2</span></div>
+              <div class="sch" style="margin-top:12px;"><div class="dy">14</div><div class="info"><b>Closes in</b><span>Tomorrow 6 PM</span></div></div>
+            </div>
+          </div></div>
+          <div class="shot-cap">Attendance polls<span>Headcount in one tap</span></div>
+        </div>
+        <!-- Schedule -->
+        <div class="shot">
+          <div class="shot-phone"><div class="screen">
+            <div class="mini-top"><div class="av">📅</div><div><b>Team schedule</b><small>This month</small></div></div>
+            <div class="mini-body">
+              <div class="sch"><div class="dy">Sun</div><div class="info"><b>League match</b><span>07:00 · City Ground</span></div></div>
+              <div class="sch"><div class="dy">Wed</div><div class="info"><b>Night training</b><span>20:00 · Futsal B</span></div></div>
+              <div class="sch"><div class="dy">Sat</div><div class="info"><b>Friendly</b><span>15:00 · Riverside Pitch</span></div></div>
+              <div class="sch"><div class="dy">Sun</div><div class="info"><b>League match (recurring)</b><span>07:00 · City Ground</span></div></div>
+            </div>
+          </div></div>
+          <div class="shot-cap">Recurring schedules<span>Set once, repeats automatically</span></div>
+        </div>
+        <!-- AI assistant -->
+        <div class="shot">
+          <div class="shot-phone"><div class="screen">
+            <div class="mini-top"><div class="av">🎙️</div><div><b>AI assistant</b><small>Listening…</small></div></div>
+            <div class="mini-body ai-screen">
+              <div class="ai-orb">🎙️</div>
+              <div class="ai-wave"><i></i><i></i><i></i><i></i><i></i></div>
+              <div class="ai-q">"When's the next match?"</div>
+              <div class="bubble in" style="align-self:center;">Your next match is <b>Sunday 07:00</b> at City Ground.</div>
+            </div>
+          </div></div>
+          <div class="shot-cap">AI voice assistant<span>Ask out loud, get answers</span></div>
         </div>
       </div>
     </div>
