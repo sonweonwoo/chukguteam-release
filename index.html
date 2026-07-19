@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>축구팀 · AI 팀 매니저 앱</title>
+<meta name="description" content="우리 축구팀을 위한 올인원 앱 — 실시간 채팅, AI 음성 비서, 참석 투표, 반복 일정까지 한 곳에서." />
+<meta property="og:title" content="축구팀 · AI 팀 매니저 앱" />
+<meta property="og:description" content="실시간 채팅 · AI 음성 비서 · 참석 투표 · 반복 일정 — 우리 팀을 위한 올인원 앱" />
+<meta property="og:type" content="website" />
+<style>
+  :root {
+    --bg: #0a0e14;
+    --bg-soft: #111823;
+    --card: #151d2b;
+    --line: #22304a;
+    --text: #eef3fb;
+    --muted: #9fb0c9;
+    --accent: #22c55e;
+    --accent-2: #16a34a;
+    --accent-glow: rgba(34, 197, 94, 0.35);
+    --field: #0e1622;
+    --radius: 18px;
+    --maxw: 1080px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo",
+      "Malgun Gothic", "Noto Sans KR", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  /* ===== Header ===== */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(14px);
+    background: rgba(10, 14, 20, 0.72);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; letter-spacing: -0.02em; }
+  .brand .badge {
+    width: 34px; height: 34px; border-radius: 10px;
+    display: grid; place-items: center;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    box-shadow: 0 6px 18px var(--accent-glow);
+    font-size: 18px;
+  }
+  .nav-links { display: flex; gap: 26px; align-items: center; }
+  .nav-links a { color: var(--muted); font-size: 15px; font-weight: 600; transition: color .18s; }
+  .nav-links a:hover { color: var(--text); }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 20px; border-radius: 999px; font-weight: 700; font-size: 15px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #04140a; border: none; cursor: pointer;
+    box-shadow: 0 8px 24px var(--accent-glow);
+    transition: transform .16s ease, box-shadow .16s ease;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px var(--accent-glow); }
+  .btn.ghost {
+    background: transparent; color: var(--text);
+    border: 1px solid var(--line); box-shadow: none;
+  }
+  .btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .nav .btn { padding: 9px 18px; font-size: 14px; }
+  @media (max-width: 720px) { .nav-links { display: none; } }
+
+  /* ===== Hero ===== */
+  .hero { position: relative; padding: 92px 0 72px; overflow: hidden; }
+  .hero::before {
+    content: ""; position: absolute; inset: -20% -10% auto -10%; height: 620px;
+    background:
+      radial-gradient(560px 320px at 25% 20%, rgba(34,197,94,0.20), transparent 70%),
+      radial-gradient(520px 320px at 85% 10%, rgba(59,130,246,0.16), transparent 70%);
+    pointer-events: none;
+  }
+  .pitch-lines {
+    position: absolute; inset: 0; opacity: .06; pointer-events: none;
+    background-image:
+      linear-gradient(var(--text) 1px, transparent 1px),
+      linear-gradient(90deg, var(--text) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(70% 60% at 50% 30%, #000 30%, transparent 80%);
+  }
+  .hero-grid {
+    position: relative; display: grid; grid-template-columns: 1.1fr 0.9fr;
+    gap: 48px; align-items: center;
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.02em;
+    color: var(--accent); background: rgba(34,197,94,0.10);
+    border: 1px solid rgba(34,197,94,0.28);
+    padding: 7px 14px; border-radius: 999px; margin-bottom: 22px;
+  }
+  .hero h1 {
+    font-size: clamp(38px, 6vw, 60px); line-height: 1.08;
+    letter-spacing: -0.03em; font-weight: 900; margin-bottom: 20px;
+  }
+  .hero h1 .hl { color: var(--accent); }
+  .hero p.lead { font-size: 19px; color: var(--muted); max-width: 520px; margin-bottom: 32px; }
+  .cta-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .cta-note { font-size: 13px; color: var(--muted); margin-top: 16px; }
+
+  /* Phone mockup */
+  .phone-wrap { display: grid; place-items: center; }
+  .phone {
+    width: 280px; height: 570px; border-radius: 38px;
+    background: linear-gradient(160deg, #1b2536, #0d141f);
+    border: 1px solid var(--line);
+    box-shadow: 0 40px 90px rgba(0,0,0,0.55), 0 0 0 6px rgba(255,255,255,0.02);
+    padding: 14px; position: relative;
+    animation: float 6s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+  .phone::before {
+    content: ""; position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+    width: 120px; height: 26px; background: #05090f; border-radius: 0 0 16px 16px;
+  }
+  .screen {
+    width: 100%; height: 100%; border-radius: 26px; overflow: hidden;
+    background: radial-gradient(120% 80% at 50% 0%, #16233a, #0a1220);
+    display: flex; flex-direction: column;
+  }
+  .screen-top {
+    padding: 40px 18px 16px; text-align: center;
+    background: linear-gradient(135deg, rgba(34,197,94,0.16), transparent);
+  }
+  .emblem {
+    width: 66px; height: 66px; margin: 0 auto 10px; border-radius: 20px;
+    display: grid; place-items: center; font-size: 34px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    box-shadow: 0 10px 26px var(--accent-glow);
+  }
+  .screen-top .t { font-weight: 800; font-size: 17px; }
+  .screen-top .s { font-size: 12px; color: var(--muted); }
+  .screen-body { flex: 1; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .row-card {
+    background: rgba(255,255,255,0.04); border: 1px solid var(--line);
+    border-radius: 14px; padding: 12px; display: flex; align-items: center; gap: 10px;
+  }
+  .row-card .ic { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; font-size: 17px; background: rgba(34,197,94,0.14); }
+  .row-card .txt { flex: 1; }
+  .row-card .txt b { font-size: 13px; display: block; }
+  .row-card .txt span { font-size: 11px; color: var(--muted); }
+  .row-card .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+  @media (max-width: 860px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .phone-wrap { order: -1; }
+    .phone { width: 240px; height: 490px; }
+  }
+
+  /* ===== Stats ===== */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 8px 0 12px; }
+  .stat {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 22px; text-align: center;
+  }
+  .stat .n { font-size: 30px; font-weight: 900; color: var(--accent); letter-spacing: -0.02em; }
+  .stat .l { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+
+  /* ===== Sections ===== */
+  section.block { padding: 84px 0; }
+  .sec-head { text-align: center; max-width: 640px; margin: 0 auto 52px; }
+  .sec-head .kicker { color: var(--accent); font-weight: 800; font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; }
+  .sec-head h2 { font-size: clamp(28px, 4.5vw, 40px); letter-spacing: -0.02em; margin: 10px 0 14px; font-weight: 900; }
+  .sec-head p { color: var(--muted); font-size: 17px; }
+
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .feature {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 28px; transition: transform .18s ease, border-color .18s ease;
+  }
+  .feature:hover { transform: translateY(-4px); border-color: rgba(34,197,94,0.5); }
+  .feature .ic {
+    width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center;
+    font-size: 26px; margin-bottom: 18px;
+    background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.25);
+  }
+  .feature h3 { font-size: 19px; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .feature p { color: var(--muted); font-size: 15px; }
+  @media (max-width: 860px) { .features { grid-template-columns: 1fr; } }
+
+  /* ===== Steps ===== */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .step { position: relative; padding: 28px; background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius); }
+  .step .num {
+    width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center;
+    font-weight: 900; font-size: 18px; margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #04140a;
+  }
+  .step h3 { font-size: 18px; margin-bottom: 8px; }
+  .step p { color: var(--muted); font-size: 15px; }
+  @media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
+
+  /* ===== Download CTA ===== */
+  .download {
+    background: linear-gradient(135deg, rgba(34,197,94,0.14), rgba(59,130,246,0.10));
+    border: 1px solid rgba(34,197,94,0.28); border-radius: 26px;
+    padding: 56px 40px; text-align: center; position: relative; overflow: hidden;
+  }
+  .download h2 { font-size: clamp(28px, 4.5vw, 38px); font-weight: 900; letter-spacing: -0.02em; margin-bottom: 12px; }
+  .download p { color: var(--muted); font-size: 17px; margin-bottom: 28px; }
+  .dl-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn.lg { padding: 15px 30px; font-size: 17px; }
+  .dl-meta { margin-top: 20px; font-size: 13px; color: var(--muted); }
+
+  /* ===== Footer ===== */
+  footer { border-top: 1px solid var(--line); padding: 44px 0; margin-top: 40px; }
+  .foot { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .foot .brand { font-size: 16px; }
+  .foot p { color: var(--muted); font-size: 14px; }
+  .foot-links { display: flex; gap: 20px; }
+  .foot-links a { color: var(--muted); font-size: 14px; }
+  .foot-links a:hover { color: var(--accent); }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top"><span class="badge">⚽</span> 축구팀</a>
+    <nav class="nav-links">
+      <a href="#features">기능</a>
+      <a href="#how">시작하기</a>
+      <a href="#download">다운로드</a>
+    </nav>
+    <a class="btn" href="#download">앱 설치</a>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="pitch-lines"></div>
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">⚡ AI 음성 비서 탑재</span>
+        <h1>우리 팀의 모든 것,<br><span class="hl">한 앱</span>에서</h1>
+        <p class="lead">
+          실시간 채팅부터 참석 투표, 반복 일정 관리까지.
+          AI 음성 비서가 팀 운영을 도와주는 축구팀 올인원 앱입니다.
+        </p>
+        <div class="cta-row">
+          <a class="btn lg" href="#download">📲 지금 설치하기</a>
+          <a class="btn ghost lg" href="#features">기능 둘러보기</a>
+        </div>
+        <p class="cta-note">Android APK · 무료 · 회원가입 후 바로 이용</p>
+      </div>
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="screen">
+            <div class="screen-top">
+              <div class="emblem">⚽</div>
+              <div class="t">우리 축구팀</div>
+              <div class="s">FC · 매주 일요일 경기</div>
+            </div>
+            <div class="screen-body">
+              <div class="row-card">
+                <div class="ic">💬</div>
+                <div class="txt"><b>팀 채팅</b><span>실시간 대화 · 새 메시지 3</span></div>
+                <div class="dot"></div>
+              </div>
+              <div class="row-card">
+                <div class="ic">✅</div>
+                <div class="txt"><b>이번 주 참석 투표</b><span>참석 9 · 불참 2</span></div>
+              </div>
+              <div class="row-card">
+                <div class="ic">📅</div>
+                <div class="txt"><b>반복 일정</b><span>일 07:00 · 시민운동장</span></div>
+              </div>
+              <div class="row-card">
+                <div class="ic">🎙️</div>
+                <div class="txt"><b>AI 비서</b><span>"다음 경기 언제야?"</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="wrap">
+    <div class="stats reveal">
+      <div class="stat"><div class="n">4+</div><div class="l">핵심 기능</div></div>
+      <div class="stat"><div class="n">실시간</div><div class="l">팀 채팅</div></div>
+      <div class="stat"><div class="n">AI</div><div class="l">음성 비서</div></div>
+      <div class="stat"><div class="n">무료</div><div class="l">설치 & 이용</div></div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="block" id="features">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">Features</div>
+        <h2>팀 운영에 필요한 모든 기능</h2>
+        <p>흩어져 있던 단톡방, 투표, 일정 공유를 하나로 모았습니다.</p>
+      </div>
+      <div class="features">
+        <div class="feature reveal">
+          <div class="ic">💬</div>
+          <h3>실시간 팀 채팅</h3>
+          <p>경기 전략부터 뒤풀이 약속까지, 팀원 모두와 실시간으로 소통하세요. 소켓 기반 안정적인 연결.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="ic">🎙️</div>
+          <h3>AI 음성 비서</h3>
+          <p>"다음 경기 언제야?" 말 한마디면 일정과 정보를 바로 확인. 음성으로 편하게 물어보세요.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="ic">✅</div>
+          <h3>참석 투표</h3>
+          <p>경기마다 참석·불참을 한 번에 투표. 인원 파악이 빨라져 매치 준비가 수월해집니다.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="ic">📅</div>
+          <h3>반복 일정 관리</h3>
+          <p>매주 같은 시간, 같은 장소. 반복 일정으로 한 번만 등록하면 자동으로 챙겨드립니다.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="ic">🏆</div>
+          <h3>팀 소개 & 엠블럼</h3>
+          <p>우리 팀만의 엠블럼과 소개를 홈 화면에 담아, 소속감 있는 팀 페이지를 완성하세요.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="ic">🧭</div>
+          <h3>친절한 사용 안내</h3>
+          <p>첫 등록·입장 도움말과 페이지별 사용법 안내로, 누구나 헤매지 않고 시작할 수 있습니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section class="block" id="how" style="background:var(--bg-soft); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">Get Started</div>
+        <h2>3단계면 시작</h2>
+        <p>복잡한 설정 없이, 설치하고 바로 팀을 꾸릴 수 있어요.</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <div class="num">1</div>
+          <h3>앱 설치</h3>
+          <p>아래 버튼으로 APK를 내려받아 설치하세요. Android 기기에서 바로 실행됩니다.</p>
+        </div>
+        <div class="step reveal">
+          <div class="num">2</div>
+          <h3>팀 만들기 · 입장</h3>
+          <p>새 팀을 만들거나 초대받은 팀에 입장하세요. 도움말 말풍선이 처음을 안내합니다.</p>
+        </div>
+        <div class="step reveal">
+          <div class="num">3</div>
+          <h3>바로 운영 시작</h3>
+          <p>채팅·투표·일정을 켜고, AI 비서에게 물어보며 팀을 편하게 관리하세요.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOAD -->
+  <section class="block" id="download">
+    <div class="wrap">
+      <div class="download reveal">
+        <h2>지금 우리 팀 앱을 시작하세요</h2>
+        <p>무료로 설치하고, 오늘 경기부터 함께 관리해 보세요.</p>
+        <div class="dl-row">
+          <a class="btn lg" href="https://chukguteam-api.onrender.com/app">📲 앱 설치 (Android)</a>
+          <a class="btn ghost lg" href="chukguteam.apk" download>APK 직접 다운로드</a>
+        </div>
+        <div class="dl-meta">설치 주소 · chukguteam-api.onrender.com/app · 새 빌드는 항상 최신본으로 유지됩니다.</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <div class="brand"><span class="badge">⚽</span> 축구팀</div>
+      <p style="margin-top:8px;">AI 팀 매니저 · 우리 팀을 위한 올인원 앱</p>
+    </div>
+    <div class="foot-links">
+      <a href="#features">기능</a>
+      <a href="#how">시작하기</a>
+      <a href="#download">다운로드</a>
+    </div>
+  </div>
+  <div class="wrap" style="margin-top:20px;">
+    <p style="color:var(--muted); font-size:13px;">© 2026 축구팀 앱. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+</script>
+</body>
+</html>
