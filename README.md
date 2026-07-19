@@ -3,7 +3,11 @@
 이 저장소는 **앱 설치 파일(APK)** 과 **소개 홈페이지(`index.html`)** 를 보관합니다. 앱 소스 코드는 들어있지 않습니다.
 
 ### 홈페이지
-`index.html` — 앱 소개 랜딩 페이지(정적 HTML, 단일 파일). 브라우저로 바로 열거나 GitHub Pages 등으로 배포할 수 있습니다.
+- `index.html` — 앱 소개 랜딩 페이지(한국어)
+- `en/index.html` — 영어 버전(English)
+
+정적 HTML이며, 각 페이지 상단의 **KO / EN** 버튼으로 서로 전환할 수 있습니다. 브라우저로 바로 열거나 GitHub Pages 등으로 배포할 수 있습니다.
+공개 주소: https://sonweonwoo.github.io/chukguteam-release/ (영어: `/en/`)
 
 ### 설치 주소
 **https://chukguteam-api.onrender.com/app**
