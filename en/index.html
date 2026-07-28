@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chukguteam · AI Team Manager App</title>
+<meta name="description" content="An all-in-one app for your football team — real-time chat, AI voice assistant, attendance polls, and recurring schedules in one place." />
+<meta property="og:title" content="Chukguteam · AI Team Manager App" />
+<meta property="og:description" content="Real-time chat · AI voice assistant · attendance polls · recurring schedules — the all-in-one app for your team" />
+<meta property="og:type" content="website" />
+<style>
+  :root {
+    --bg: #0a0e14;
+    --bg-soft: #111823;
+    --card: #151d2b;
+    --line: #22304a;
+    --text: #eef3fb;
+    --muted: #9fb0c9;
+    --accent: #3b82f6;
+    --accent-2: #2563eb;
+    --accent-glow: rgba(59,130,246, 0.35);
+    --field: #0e1622;
+    --radius: 18px;
+    --maxw: 1080px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  /* ===== Header ===== */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(14px);
+    background: rgba(10, 14, 20, 0.72);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; letter-spacing: -0.02em; }
+  .brand .badge {
+    width: 34px; height: 34px; border-radius: 10px;
+    display: grid; place-items: center;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    box-shadow: 0 6px 18px var(--accent-glow);
+    font-size: 18px;
+  }
+  .nav-links { display: flex; gap: 26px; align-items: center; }
+  .nav-links a { color: var(--muted); font-size: 15px; font-weight: 600; transition: color .18s; }
+  .nav-links a:hover { color: var(--text); }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 20px; border-radius: 999px; font-weight: 700; font-size: 15px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #ffffff; border: none; cursor: pointer;
+    box-shadow: 0 8px 24px var(--accent-glow);
+    transition: transform .16s ease, box-shadow .16s ease;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px var(--accent-glow); }
+  .btn.ghost {
+    background: transparent; color: var(--text);
+    border: 1px solid var(--line); box-shadow: none;
+  }
+  .btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .nav .btn { padding: 9px 18px; font-size: 14px; }
+  .nav-right { display: flex; align-items: center; gap: 14px; }
+  .lang { display: inline-flex; align-items: center; gap: 2px; font-size: 13px; font-weight: 700;
+    border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+  .lang a, .lang span { padding: 4px 10px; border-radius: 999px; color: var(--muted); transition: all .16s; }
+  .lang a:hover { color: var(--text); }
+  .lang .lang-cur { background: rgba(59,130,246,0.16); color: var(--accent); }
+  @media (max-width: 720px) { .nav-links { display: none; } }
+
+  /* ===== Hero ===== */
+  .hero { position: relative; padding: 92px 0 72px; overflow: hidden; }
+  .hero::before {
+    content: ""; position: absolute; inset: -20% -10% auto -10%; height: 620px;
+    background:
+      radial-gradient(560px 320px at 25% 20%, rgba(59,130,246,0.20), transparent 70%),
+      radial-gradient(520px 320px at 85% 10%, rgba(129,140,248,0.16), transparent 70%);
+    pointer-events: none;
+  }
+  .pitch-lines {
+    position: absolute; inset: 0; opacity: .06; pointer-events: none;
+    background-image:
+      linear-gradient(var(--text) 1px, transparent 1px),
+      linear-gradient(90deg, var(--text) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(70% 60% at 50% 30%, #000 30%, transparent 80%);
+  }
+  .hero-grid {
+    position: relative; display: grid; grid-template-columns: 1.1fr 0.9fr;
+    gap: 48px; align-items: center;
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.02em;
+    color: var(--accent); background: rgba(59,130,246,0.10);
+    border: 1px solid rgba(59,130,246,0.28);
+    padding: 7px 14px; border-radius: 999px; margin-bottom: 22px;
+  }
+  .hero h1 {
+    font-size: clamp(38px, 6vw, 60px); line-height: 1.08;
+    letter-spacing: -0.03em; font-weight: 900; margin-bottom: 20px;
+  }
+  .hero h1 .hl { color: var(--accent); }
+  .hero p.lead { font-size: 19px; color: var(--muted); max-width: 520px; margin-bottom: 32px; }
+  .cta-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .cta-note { font-size: 13px; color: var(--muted); margin-top: 16px; }
+
+  /* Phone mockup */
+  .phone-wrap { display: grid; place-items: center; }
+  .phone {
+    width: 280px; height: 570px; border-radius: 38px;
+    background: linear-gradient(160deg, #1b2536, #0d141f);
+    border: 1px solid var(--line);
+    box-shadow: 0 40px 90px rgba(0,0,0,0.55), 0 0 0 6px rgba(255,255,255,0.02);
+    padding: 14px; position: relative;
+    animation: float 6s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+  .phone::before {
+    content: ""; position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+    width: 120px; height: 26px; background: #05090f; border-radius: 0 0 16px 16px;
+  }
+  .screen {
+    width: 100%; height: 100%; border-radius: 26px; overflow: hidden;
+    background: radial-gradient(120% 80% at 50% 0%, #16233a, #0a1220);
+    display: flex; flex-direction: column;
+  }
+  .screen-top {
+    padding: 40px 18px 16px; text-align: center;
+    background: linear-gradient(135deg, rgba(59,130,246,0.16), transparent);
+  }
+  .emblem {
+    width: 66px; height: 66px; margin: 0 auto 10px; border-radius: 20px;
+    display: grid; place-items: center; font-size: 34px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    box-shadow: 0 10px 26px var(--accent-glow);
+  }
+  .screen-top .t { font-weight: 800; font-size: 17px; }
+  .screen-top .s { font-size: 12px; color: var(--muted); }
+  .screen-body { flex: 1; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .row-card {
+    background: rgba(255,255,255,0.04); border: 1px solid var(--line);
+    border-radius: 14px; padding: 12px; display: flex; align-items: center; gap: 10px;
+  }
+  .row-card .ic { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; font-size: 17px; background: rgba(59,130,246,0.14); }
+  .row-card .txt { flex: 1; }
+  .row-card .txt b { font-size: 13px; display: block; }
+  .row-card .txt span { font-size: 11px; color: var(--muted); }
+  .row-card .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+  @media (max-width: 860px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .phone-wrap { order: -1; }
+    .phone { width: 240px; height: 490px; }
+  }
+
+  /* ===== Stats ===== */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 8px 0 12px; }
+  .stat {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 22px; text-align: center;
+  }
+  .stat .n { font-size: 30px; font-weight: 900; color: var(--accent); letter-spacing: -0.02em; }
+  .stat .l { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+
+  /* ===== Sections ===== */
+  section.block { padding: 84px 0; }
+  .sec-head { text-align: center; max-width: 640px; margin: 0 auto 52px; }
+  .sec-head .kicker { color: var(--accent); font-weight: 800; font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; }
+  .sec-head h2 { font-size: clamp(28px, 4.5vw, 40px); letter-spacing: -0.02em; margin: 10px 0 14px; font-weight: 900; }
+  .sec-head p { color: var(--muted); font-size: 17px; }
+
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .feature {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 28px; transition: transform .18s ease, border-color .18s ease;
+  }
+  .feature:hover { transform: translateY(-4px); border-color: rgba(59,130,246,0.5); }
+  .feature .ic {
+    width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center;
+    font-size: 26px; margin-bottom: 18px;
+    background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.25);
+  }
+  .feature h3 { font-size: 19px; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .feature p { color: var(--muted); font-size: 15px; }
+  @media (max-width: 860px) { .features { grid-template-columns: 1fr; } }
+
+  /* ===== Steps ===== */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .step { position: relative; padding: 28px; background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius); }
+  .step .num {
+    width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center;
+    font-weight: 900; font-size: 18px; margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #ffffff;
+  }
+  .step h3 { font-size: 18px; margin-bottom: 8px; }
+  .step p { color: var(--muted); font-size: 15px; }
+  @media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
+
+  /* ===== Download CTA ===== */
+  .download {
+    background: linear-gradient(135deg, rgba(59,130,246,0.14), rgba(129,140,248,0.10));
+    border: 1px solid rgba(59,130,246,0.28); border-radius: 26px;
+    padding: 56px 40px; text-align: center; position: relative; overflow: hidden;
+  }
+  .download h2 { font-size: clamp(28px, 4.5vw, 38px); font-weight: 900; letter-spacing: -0.02em; margin-bottom: 12px; }
+  .download p { color: var(--muted); font-size: 17px; margin-bottom: 28px; }
+  .dl-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn.lg { padding: 15px 30px; font-size: 17px; }
+  .dl-meta { margin-top: 20px; font-size: 13px; color: var(--muted); }
+
+  /* ===== Screenshot gallery ===== */
+  .shots-track {
+    display: flex; gap: 26px; overflow-x: auto; padding: 10px 4px 26px;
+    scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+  }
+  .shots-track::-webkit-scrollbar { height: 8px; }
+  .shots-track::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
+  .shot { scroll-snap-align: center; flex: 0 0 auto; text-align: center; }
+  .shot-phone {
+    width: 232px; height: 470px; border-radius: 34px;
+    background: linear-gradient(160deg, #1b2536, #0d141f);
+    border: 1px solid var(--line);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    padding: 10px; position: relative;
+  }
+  .shot-phone::before {
+    content: ""; position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    width: 96px; height: 20px; background: #05090f; border-radius: 0 0 14px 14px; z-index: 2;
+  }
+  .shot .screen {
+    width: 100%; height: 100%; border-radius: 24px; overflow: hidden;
+    background: radial-gradient(120% 80% at 50% 0%, #16233a, #0a1220);
+    display: flex; flex-direction: column;
+  }
+  .mini-top {
+    padding: 30px 14px 12px; display: flex; align-items: center; gap: 9px;
+    background: linear-gradient(135deg, rgba(59,130,246,0.16), transparent);
+    border-bottom: 1px solid var(--line);
+  }
+  .mini-top .av { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-size: 15px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+  .mini-top b { font-size: 13px; }
+  .mini-top small { display: block; color: var(--muted); font-size: 10px; font-weight: 400; }
+  .mini-body { flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 9px; overflow: hidden; }
+  /* chat */
+  .bubble { max-width: 80%; padding: 8px 11px; border-radius: 14px; font-size: 11.5px; line-height: 1.45; }
+  .bubble.in { align-self: flex-start; background: rgba(255,255,255,0.06); border: 1px solid var(--line); border-bottom-left-radius: 4px; }
+  .bubble.out { align-self: flex-end; background: rgba(59,130,246,0.18); border: 1px solid rgba(59,130,246,0.3); color: #dbeafe; border-bottom-right-radius: 4px; }
+  /* poll */
+  .poll-row { display: flex; align-items: center; gap: 8px; font-size: 11.5px; }
+  .poll-row .pl { width: 46px; text-align: left; color: var(--muted); }
+  .poll-row .bar { flex: 1; height: 12px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden; }
+  .poll-row .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+  .poll-row .pn { width: 20px; text-align: right; font-weight: 700; }
+  .poll-q { font-size: 12.5px; font-weight: 700; margin-bottom: 2px; }
+  /* schedule */
+  .sch { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 12px;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--line); }
+  .sch .dy { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; font-weight: 800; font-size: 12px;
+    background: rgba(59,130,246,0.14); color: var(--accent); }
+  .sch .info b { font-size: 12px; display: block; }
+  .sch .info span { font-size: 10.5px; color: var(--muted); }
+  /* ai */
+  .ai-screen { align-items: center; justify-content: center; text-align: center; gap: 16px; }
+  .ai-orb { width: 96px; height: 96px; border-radius: 50%;
+    background: radial-gradient(circle at 50% 40%, rgba(59,130,246,0.55), rgba(59,130,246,0.08) 70%);
+    display: grid; place-items: center; font-size: 40px;
+    box-shadow: 0 0 40px var(--accent-glow); animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { transform: scale(1); opacity: .9; } 50% { transform: scale(1.06); opacity: 1; } }
+  .ai-wave { display: flex; gap: 4px; align-items: flex-end; height: 26px; }
+  .ai-wave i { width: 4px; background: var(--accent); border-radius: 2px; animation: eq 1s ease-in-out infinite; }
+  .ai-wave i:nth-child(1){height:40%;animation-delay:0s}.ai-wave i:nth-child(2){height:90%;animation-delay:.15s}
+  .ai-wave i:nth-child(3){height:60%;animation-delay:.3s}.ai-wave i:nth-child(4){height:100%;animation-delay:.45s}
+  .ai-wave i:nth-child(5){height:50%;animation-delay:.6s}
+  @keyframes eq { 0%,100% { transform: scaleY(.5); } 50% { transform: scaleY(1); } }
+  .ai-q { font-size: 12.5px; color: var(--text); padding: 0 20px; }
+  .shot-cap { margin-top: 14px; font-weight: 700; font-size: 15px; }
+  .shot-cap span { display: block; color: var(--muted); font-weight: 400; font-size: 13px; margin-top: 2px; }
+
+  /* ===== Footer ===== */
+  footer { border-top: 1px solid var(--line); padding: 44px 0; margin-top: 40px; }
+  .foot { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .foot .brand { font-size: 16px; }
+  .foot p { color: var(--muted); font-size: 14px; }
+  .foot-links { display: flex; gap: 20px; }
+  .foot-links a { color: var(--muted); font-size: 14px; }
+  .foot-links a:hover { color: var(--accent); }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top"><span class="badge">⚽</span> Chukguteam</a>
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#screenshots">Preview</a>
+      <a href="#how">Get Started</a>
+      <a href="#download">Download</a>
+    </nav>
+    <div class="nav-right">
+      <div class="lang" role="group" aria-label="Language">
+        <a href="../">KO</a>
+        <span class="lang-cur" aria-current="page">EN</span>
+      </div>
+      <a class="btn" href="#download">Install</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="pitch-lines"></div>
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">⚡ Built-in AI voice assistant</span>
+        <h1>Everything your team needs,<br>in <span class="hl">one app</span></h1>
+        <p class="lead">
+          From real-time chat to attendance polls and recurring schedules —
+          an all-in-one football team app with an AI voice assistant that helps you run the team.
+        </p>
+        <div class="cta-row">
+          <a class="btn lg" href="#download">📲 Install now</a>
+          <a class="btn ghost lg" href="#features">Explore features</a>
+        </div>
+        <p class="cta-note">Android APK · Free · Ready to use after sign-up</p>
+      </div>
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="screen">
+            <div class="screen-top">
+              <div class="emblem">⚽</div>
+              <div class="t">Our Football Team</div>
+              <div class="s">FC · Matches every Sunday</div>
+            </div>
+            <div class="screen-body">
+              <div class="row-card">
+                <div class="ic">💬</div>
+                <div class="txt"><b>Team chat</b><span>Live conversation · 3 new</span></div>
+                <div class="dot"></div>
+              </div>
+              <div class="row-card">
+                <div class="ic">✅</div>
+                <div class="txt"><b>This week's attendance</b><span>In 9 · Out 2</span></div>
+              </div>
+              <div class="row-card">
+                <div class="ic">📅</div>
+                <div class="txt"><b>Recurring schedule</b><span>Sun 07:00 · City Ground</span></div>
+              </div>
+              <div class="row-card">
+                <div class="ic">🎙️</div>
+                <div class="txt"><b>AI assistant</b><span>"When's the next match?"</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="wrap">
+    <div class="stats reveal">
+      <div class="stat"><div class="n">4+</div><div class="l">Core features</div></div>
+      <div class="stat"><div class="n">Live</div><div class="l">Team chat</div></div>
+      <div class="stat"><div class="n">AI</div><div class="l">Voice assistant</div></div>
+      <div class="stat"><div class="n">Free</div><div class="l">Install &amp; use</div></div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="block" id="features">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">Features</div>
+        <h2>Everything you need to run a team</h2>
+        <p>Scattered group chats, polls, and schedules — now in one place.</p>
+      </div>
+      <div class="features">
+        <div class="feature reveal">
+          <div class="ic">💬</div>
+          <h3>Real-time team chat</h3>
+          <p>From match tactics to post-game plans, talk with everyone in real time over a stable socket connection.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="ic">🎙️</div>
+          <h3>AI voice assistant</h3>
+          <p>"When's the next match?" — just ask, and get schedules and info instantly. Speak naturally, hands-free.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="ic">✅</div>
+          <h3>Attendance polls</h3>
+          <p>Vote in or out for each match in one tap. Faster headcounts mean smoother match-day prep.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="ic">📅</div>
+          <h3>Recurring schedules</h3>
+          <p>Same time, same place, every week. Set a recurring schedule once and it's handled automatically.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="ic">🏆</div>
+          <h3>Team profile &amp; emblem</h3>
+          <p>Put your own emblem and intro on the home screen to build a team page with real identity.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="ic">🧭</div>
+          <h3>Friendly guidance</h3>
+          <p>First-time setup tips and per-page how-to hints mean anyone can start without getting lost.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREENSHOTS -->
+  <section class="block" id="screenshots">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">Screenshots</div>
+        <h2>App preview</h2>
+        <p>Here's how it looks in the real app. Swipe to browse the screens.</p>
+      </div>
+      <div class="shots-track reveal">
+        <!-- Chat -->
+        <div class="shot">
+          <div class="shot-phone"><div class="screen">
+            <div class="mini-top"><div class="av">💬</div><div><b>Team chat</b><small>11 online</small></div></div>
+            <div class="mini-body">
+              <div class="bubble in">Is everyone in for Saturday's match?</div>
+              <div class="bubble out">I'm in! ⚽</div>
+              <div class="bubble in">We need one more keeper</div>
+              <div class="bubble out">I'll take the goal 🧤</div>
+              <div class="bubble in">Great, 07:00 at City Ground!</div>
+            </div>
+          </div></div>
+          <div class="shot-cap">Real-time team chat<span>Tactics &amp; plans in one place</span></div>
+        </div>
+        <!-- Poll -->
+        <div class="shot">
+          <div class="shot-phone"><div class="screen">
+            <div class="mini-top"><div class="av">✅</div><div><b>Attendance poll</b><small>Saturday match</small></div></div>
+            <div class="mini-body" style="justify-content:center;">
+              <div class="poll-q">Are you in for this week's match?</div>
+              <div class="poll-row"><span class="pl">In</span><div class="bar"><i style="width:82%"></i></div><span class="pn">9</span></div>
+              <div class="poll-row"><span class="pl">Maybe</span><div class="bar"><i style="width:27%"></i></div><span class="pn">3</span></div>
+              <div class="poll-row"><span class="pl">Out</span><div class="bar"><i style="width:18%"></i></div><span class="pn">2</span></div>
+              <div class="sch" style="margin-top:12px;"><div class="dy">14</div><div class="info"><b>Closes in</b><span>Tomorrow 6 PM</span></div></div>
+            </div>
+          </div></div>
+          <div class="shot-cap">Attendance polls<span>Headcount in one tap</span></div>
+        </div>
+        <!-- Schedule -->
+        <div class="shot">
+          <div class="shot-phone"><div class="screen">
+            <div class="mini-top"><div class="av">📅</div><div><b>Team schedule</b><small>This month</small></div></div>
+            <div class="mini-body">
+              <div class="sch"><div class="dy">Sun</div><div class="info"><b>League match</b><span>07:00 · City Ground</span></div></div>
+              <div class="sch"><div class="dy">Wed</div><div class="info"><b>Night training</b><span>20:00 · Futsal B</span></div></div>
+              <div class="sch"><div class="dy">Sat</div><div class="info"><b>Friendly</b><span>15:00 · Riverside Pitch</span></div></div>
+              <div class="sch"><div class="dy">Sun</div><div class="info"><b>League match (recurring)</b><span>07:00 · City Ground</span></div></div>
+            </div>
+          </div></div>
+          <div class="shot-cap">Recurring schedules<span>Set once, repeats automatically</span></div>
+        </div>
+        <!-- AI assistant -->
+        <div class="shot">
+          <div class="shot-phone"><div class="screen">
+            <div class="mini-top"><div class="av">🎙️</div><div><b>AI assistant</b><small>Listening…</small></div></div>
+            <div class="mini-body ai-screen">
+              <div class="ai-orb">🎙️</div>
+              <div class="ai-wave"><i></i><i></i><i></i><i></i><i></i></div>
+              <div class="ai-q">"When's the next match?"</div>
+              <div class="bubble in" style="align-self:center;">Your next match is <b>Sunday 07:00</b> at City Ground.</div>
+            </div>
+          </div></div>
+          <div class="shot-cap">AI voice assistant<span>Ask out loud, get answers</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section class="block" id="how" style="background:var(--bg-soft); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">Get Started</div>
+        <h2>Up and running in 3 steps</h2>
+        <p>No complex setup — install and start building your team right away.</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <div class="num">1</div>
+          <h3>Install the app</h3>
+          <p>Download the APK with the button below and install it. Runs right away on Android devices.</p>
+        </div>
+        <div class="step reveal">
+          <div class="num">2</div>
+          <h3>Create or join a team</h3>
+          <p>Start a new team or join one you were invited to. Helpful tooltips guide you through your first steps.</p>
+        </div>
+        <div class="step reveal">
+          <div class="num">3</div>
+          <h3>Start managing</h3>
+          <p>Turn on chat, polls, and schedules, and ask the AI assistant to manage your team with ease.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOAD -->
+  <section class="block" id="download">
+    <div class="wrap">
+      <div class="download reveal">
+        <h2>Start your team's app today</h2>
+        <p>Install it for free and manage today's match together.</p>
+        <div class="dl-row">
+          <a class="btn lg" href="https://chukguteam-api.onrender.com/app">📲 Install app (Android)</a>
+          <a class="btn ghost lg" href="../chukguteam.apk" download>Download APK directly</a>
+        </div>
+        <div class="dl-meta">Install URL · chukguteam-api.onrender.com/app · Always kept up to date with the latest build.</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <div class="brand"><span class="badge">⚽</span> Chukguteam</div>
+      <p style="margin-top:8px;">AI Team Manager · the all-in-one app for your team</p>
+    </div>
+    <div class="foot-links">
+      <a href="#features">Features</a>
+      <a href="#how">Get Started</a>
+      <a href="#download">Download</a>
+      <a href="../">한국어</a>
+    </div>
+  </div>
+  <div class="wrap" style="margin-top:20px;">
+    <p style="color:var(--muted); font-size:13px;">© 2026 Chukguteam. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+</script>
+</body>
+</html>
